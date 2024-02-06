@@ -2,4 +2,4 @@ start:
 	air
 
 build:
-	docker build -f ./.dockerfile -t auosrs:latest .
+	docker build -f ./dockerfile -t local:latest .
