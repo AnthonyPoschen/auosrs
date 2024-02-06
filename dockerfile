@@ -1,7 +1,13 @@
+FROM node:latest as frontend
+WORKDIR /code
+COPY . .
+RUN npm install && npx parcel build --dist-dir dist --no-content-hash
+
+# ----
 FROM golang:latest as builder
 WORKDIR /code
 # RUN go install github.com/a-h/templ/cmd/templ@latest
-COPY . .
+COPY --from=frontend /code /code
 # RUN templ generate
 RUN go test ./... && GOOS=linux GOARCH=amd64 go build -o main ./main.go
 
