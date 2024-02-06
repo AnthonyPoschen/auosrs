@@ -1,4 +1,4 @@
-module github.com/AnthonyPoschen/auosrs.git
+module github.com/anthonyposchen/auosrs.git
 
 go 1.21
 

@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/AnthonyPoschen/auosrs.git/templates"
+	"github.com/anthonyposchen/auosrs.git/templates"
 )
 
 //go:embed dist
