@@ -1,0 +1,16 @@
+package templates
+
+import "github.com/AnthonyPoschen/auosrs.git/templates/partials"
+
+templ Index() {
+	<html>
+		@partials.Head() {
+			<title>Index Page</title>
+		}
+		<body>
+			<div>
+				Hello World from templ
+			</div>
+		</body>
+	</html>
+}

@@ -1,0 +1,5 @@
+.parcel-cache/
+tmp/
+node_modules/
+dist/
+*_templ.go
