@@ -1,0 +1,27 @@
+package route
+
+import "fmt"
+
+type ActivityBoss struct {
+	Name  string
+	Kills int
+}
+
+templ Activity(bosses []ActivityBoss) {
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Boss</th>
+				<th>kills last 7 days</th>
+			</tr>
+		</thead>
+		<tbody>
+			for _, v := range bosses {
+				<tr>
+					<td>{ v.Name }</td>
+					<td>{ fmt.Sprint(v.Kills) }</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

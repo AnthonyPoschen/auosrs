@@ -6,5 +6,19 @@
   .mytext {
     @apply text-red-500;
   }
+  .text-primary {
+    @apply text-primary-light dark:text-primary-dark;
+  }
+  .bg-primary {
+    @apply bg-primary-light dark:bg-primary-dark;
+  }
 }
 
+@layer components {
+  html {
+    @apply bg-slate-200 dark:bg-gray-800;
+  }
+  /* h1 { */
+  /*   @apply text-center text-2xl; */
+  /* } */
+}

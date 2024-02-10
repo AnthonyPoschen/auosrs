@@ -5,12 +5,49 @@ import "github.com/anthonyposchen/auosrs.git/templates/partials"
 templ Index() {
 	<html>
 		@partials.Head() {
-			<title>AUOSRS Home</title>
+			<title>AUOSRS</title>
 		}
-		<body>
-			<div class="mytext">
-				Hello World from templ :D :D
-			</div>
+		<body class="container">
+			<header class="p-2">
+				<h1 class="text-4xl text-center text-primary">AUOSRS</h1>
+				<p class="text-l text-center text-slate-400">
+					Australian Old School RuneScape
+				</p>
+			</header>
+			<main class="p-4">
+				<section>
+					<div class="flex justify-center items-center">
+						<a
+							href="https://discord.gg/auosrs"
+							class="w-72 btn btn-primary flex items-center justify-center
+                     rounded-lg bg-primary bg-opacity-5 hover:bg-opacity-50"
+						>
+							<img src="/ico/discord.png" width="50" height="50"/>
+							<span class="pl-3 underline text-blue-700 dark:text-blue-400">
+								Join discord for more info
+							</span>
+						</a>
+					</div>
+					<h2 class="text-xl text-primary">Clan Information</h2>
+					<div class="flex">
+						<div class="flex-grow">
+							<p>
+								AUOSRS is an active pve and occassional pvp community of
+								layed back people who don't take the game too seriously.
+							</p>
+						</div>
+						<div class="flex-1 min-w-44">
+							<h3 class="text-primary text-l">Ingame Details</h3>
+							<p class="text-sm">Clan Chat: Au OSRS</p>
+							<p class="text-sm">Clan Home World: 350</p>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h2 class="text-xl text-primary">Clan Activity</h2>
+					<div hx-trigger="load" hx-get="/activity" hx-swap="outerHTML"></div>
+				</section>
+			</main>
 		</body>
 	</html>
 }

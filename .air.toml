@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "tmp/main"
-  cmd = "rm -rf ./tmp & rm -rf ./.parcel-cache & rm -rf ./dist & npx parcel build --dist-dir dist --no-content-hash && templ generate && go build -o ./tmp/main ./main.go"
+  cmd = "rm -rf ./tmp & rm -rf ./.parcel-cache & rm -rf ./dist & npx parcel build --dist-dir dist --no-content-hash && cp -R ./src/ico ./dist/ico && templ generate && go build -o ./tmp/main ./main.go"
   # cmd = "go build -o ./tmp/main ./cmd/website/main.go"
   delay = 1000
   exclude_dir = ["node_modules","dist","tmp",".pracel-cache"]
