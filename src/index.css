@@ -18,6 +18,9 @@
   html {
     @apply bg-slate-200 dark:bg-gray-800;
   }
+  article {
+    @apply pt-5 pb-5 mt-0 mb-0;
+  }
   /* h1 { */
   /*   @apply text-center text-2xl; */
   /* } */

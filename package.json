@@ -6,6 +6,8 @@
     "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
+    "@parcel/compressor-brotli": "^2.11.0",
+    "@parcel/compressor-gzip": "^2.11.0",
     "@parcel/watcher": "^2.4.0",
     "parcel": "^2.11.0",
     "parcel-namer-rewrite": "^2.10.3-rc.2",

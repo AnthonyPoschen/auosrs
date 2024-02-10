@@ -8,20 +8,23 @@ type ActivityBoss struct {
 }
 
 templ Activity(bosses []ActivityBoss) {
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Boss</th>
-				<th>kills last 7 days</th>
-			</tr>
-		</thead>
-		<tbody>
-			for _, v := range bosses {
+	<details open>
+		<summary>Clan Boss KC</summary>
+		<table role="grid" class="table table-striped">
+			<thead>
 				<tr>
-					<td>{ v.Name }</td>
-					<td>{ fmt.Sprint(v.Kills) }</td>
+					<th>Boss</th>
+					<th>kills last 7 days</th>
 				</tr>
-			}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				for _, v := range bosses {
+					<tr>
+						<td>{ v.Name }</td>
+						<td>{ fmt.Sprint(v.Kills) }</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</details>
 }
