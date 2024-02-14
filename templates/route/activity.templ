@@ -1,27 +1,82 @@
 package route
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type ActivityBoss struct {
-	Name  string
-	Kills int
+	Name     string
+	Kills    string
+	KillsNum int
 }
 
-templ Activity(bosses []ActivityBoss) {
+templ ActivityBossKC(bosses []ActivityBoss,TotalKC string) {
 	<details open>
-		<summary>Clan Boss KC</summary>
+		<summary class="mx-0 p-1 hover:text-lightBlue-500">
+			<span class="">Clan Boss KC 1 week: { TotalKC }</span>
+		</summary>
 		<table role="grid" class="table table-striped">
 			<thead>
 				<tr>
 					<th>Boss</th>
-					<th>kills last 7 days</th>
+					<th>kills</th>
 				</tr>
 			</thead>
 			<tbody>
 				for _, v := range bosses {
 					<tr>
 						<td>{ v.Name }</td>
-						<td>{ fmt.Sprint(v.Kills) }</td>
+						<td>{ v.Kills }</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</details>
+}
+
+type Info struct {
+	Name        string       `json:"name"`
+	Description string       `json:"description"`
+	ClanChat    string       `json:"clanChat"`
+	MemberCount int          `json:"memberCount"`
+	Homeworld   int          `json:"homeworld"`
+	Memberships []ClanMember `json:"memberships"`
+}
+type ClanMember struct {
+	PlayerID  string `json:"playerId"`
+	Role      string `json:"role"`
+	CreatedAt string `json:"createdAt"`
+	Player    struct {
+		Name string `json:"displayName"`
+	} `json:"player"`
+}
+
+templ MemberList(members []ClanMember) {
+	<details open>
+		<summary class="mx-0 p-1 hover:text-lightBlue-500">
+			<span class="">Clan Members: { fmt.Sprint(len(members)) }/500</span>
+		</summary>
+		<table role="grid" class="table table-striped">
+			<thead>
+				<tr>
+					<th>Player</th>
+					<th>Role</th>
+					<th>Joined</th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, v := range members {
+					<tr>
+						<td>{ v.Player.Name }</td>
+						<td>
+							if strings.ToLower(v.Role) == "member" {
+								<span>member</span>
+							} else {
+								<img src={ fmt.Sprintf("/ico/clan_%s.webp", strings.ToLower(v.Role)) } width="20" height="20" alt={ v.Role }/>
+							}
+						</td>
+						<td>{ v.CreatedAt } </td>
 					</tr>
 				}
 			</tbody>

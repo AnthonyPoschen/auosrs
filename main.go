@@ -17,22 +17,42 @@ import (
 
 	"github.com/anthonyposchen/auosrs.git/templates"
 	"github.com/anthonyposchen/auosrs.git/templates/route"
+	"github.com/mergestat/timediff"
+	"golang.org/x/text/message"
+	"golang.org/x/text/number"
 	"golang.org/x/time/rate"
 )
 
 const (
 	clanID = 276
+
+	RankOwner = iota + 1
+	RankDeputyOwner
+	RankMaster
+	RankGeneral
+	RankMajor
+	RankProselyte
+	RankZenyte
+	RankOnyx
+	RankDragonStone
+	RankDiamond
+	RankRuby
+	RankEmerald
+	RankSapphire
+	RankMember
+	RankGuest
 )
 
 var Bosses = []string{"abyssal_sire", "alchemical_hydra", "artio", "barrows_chests", "bryophyta", "callisto", "calvarion", "cerberus", "chambers_of_xeric", "chambers_of_xeric_challenge_mode", "chaos_elemental", "chaos_fanatic", "commander_zilyana", "corporeal_beast", "crazy_archaeologist", "dagannoth_prime", "dagannoth_rex", "dagannoth_supreme", "deranged_archaeologist", "duke_sucellus", "general_graardor", "giant_mole", "grotesque_guardians", "hespori", "kalphite_queen", "king_black_dragon", "kraken", "kreearra", "kril_tsutsaroth", "mimic", "nex", "nightmare", "phosanis_nightmare", "obor", "phantom_muspah", "sarachnis", "scorpia", "scurrius", "skotizo", "spindel", "tempoross", "the_gauntlet", "the_corrupted_gauntlet", "the_leviathan", "the_whisperer", "theatre_of_blood", "theatre_of_blood_hard_mode", "thermonuclear_smoke_devil", "tombs_of_amascut", "tombs_of_amascut_expert", "tzkal_zuk", "tztok_jad", "vardorvis", "venenatis", "vetion", "vorkath", "wintertodt", "zalcano", "zulrah"}
 
-type ClanBossInfo struct {
+type ClanInfo struct {
 	// map of boss name to the amount of kills in 1 week
 	Bosses map[string]int
+	Info   route.Info
 	sync.Mutex
 }
 
-var clanBossInfo = ClanBossInfo{Mutex: sync.Mutex{}, Bosses: make(map[string]int)}
+var clanInfo = ClanInfo{Mutex: sync.Mutex{}, Bosses: make(map[string]int)}
 
 //go:embed dist
 var dist embed.FS
@@ -48,12 +68,15 @@ func getFileSystem() http.FileSystem {
 func main() {
 	go wiseOldmanSync()
 	// start hourly cron to update wiseold man information
+	http.HandleFunc("/members", MemberList)
 	http.HandleFunc("/activity", Activity)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// for specifically the root / index
 		// we want to replace the default with our own
 		if r.URL.Path == "/" || r.URL.Path == "/index.html" {
-			templates.Index().Render(context.Background(), w)
+			clanInfo.Lock()
+			templates.Index(clanInfo.Info).Render(context.Background(), w)
+			clanInfo.Unlock()
 			return
 			// do a templ include!!
 		}
@@ -64,16 +87,79 @@ func main() {
 }
 
 func Activity(w http.ResponseWriter, r *http.Request) {
-	clanBossInfo.Lock()
-	defer clanBossInfo.Unlock()
+	clanInfo.Lock()
+	defer clanInfo.Unlock()
 	var Data []route.ActivityBoss
-	for k, v := range clanBossInfo.Bosses {
-		Data = append(Data, route.ActivityBoss{Name: strings.ReplaceAll(k, "_", " "), Kills: v})
+	var Total int
+	p := message.NewPrinter(message.MatchLanguage("en"))
+	for k, v := range clanInfo.Bosses {
+		Data = append(Data, route.ActivityBoss{Name: strings.ReplaceAll(k, "_", " "), Kills: p.Sprint(number.Decimal(v)), KillsNum: v})
+		Total += v
 	}
 	slices.SortFunc(Data, func(i route.ActivityBoss, j route.ActivityBoss) int {
-		return cmp.Compare(i.Kills, j.Kills) * -1
+		return cmp.Compare(i.KillsNum, j.KillsNum) * -1
 	})
-	route.Activity(Data).Render(context.Background(), w)
+	route.ActivityBossKC(Data, p.Sprint(number.Decimal(Total))).Render(context.Background(), w)
+}
+
+func MemberList(w http.ResponseWriter, r *http.Request) {
+	// get the member list from the api
+	var data []route.ClanMember
+	clanInfo.Lock()
+	defer clanInfo.Unlock()
+	for _, v := range clanInfo.Info.Memberships {
+		t, _ := time.Parse(time.RFC3339, v.CreatedAt)
+		createDiff := timediff.TimeDiff(t)
+		data = append(data, route.ClanMember{
+			PlayerID:  v.PlayerID,
+			Role:      v.Role,
+			CreatedAt: createDiff,
+			Player: struct {
+				Name string "json:\"displayName\""
+			}{Name: v.Player.Name},
+		})
+	}
+	slices.SortFunc(data, func(i route.ClanMember, j route.ClanMember) int {
+		// lowest first in list
+		r := func(a route.ClanMember) int {
+			switch a.Role {
+			case "owner":
+				return RankOwner
+			case "deputy_owner":
+				return RankDeputyOwner
+			case "master":
+				return RankMaster
+			case "general":
+				return RankGeneral
+			case "major":
+				return RankMajor
+			case "proselyte":
+				return RankProselyte
+			case "zenyte":
+				return RankZenyte
+			case "onyx":
+				return RankOnyx
+			case "dragonstone":
+				return RankDragonStone
+			case "diamond":
+				return RankDiamond
+			case "ruby":
+				return RankRuby
+			case "emerald":
+				return RankEmerald
+			case "sapphire":
+				return RankSapphire
+			case "member":
+				return RankMember
+			case "guest":
+				return RankGuest
+			default:
+				return -1
+			}
+		}
+		return cmp.Compare(r(i), r(j))
+	})
+	route.MemberList(data).Render(context.Background(), w)
 }
 
 type wiseOldMangained struct {
@@ -84,21 +170,35 @@ type wiseOldMangained struct {
 
 func wiseOldmanSync() {
 	rl := rate.NewLimiter(rate.Every(time.Minute/20), 1)
-	Client := new(http.Client)
-	Client.Timeout = 10 * time.Second
-
-	api := "https://api.wiseoldman.net/v2/groups/%d/gained?metric=%s&period=week&limit=50&offset=%d"
+	ctx := context.Background()
+	apiBossKC := "https://api.wiseoldman.net/v2/groups/%d/gained?metric=%s&period=week&limit=50&offset=%d"
 	for {
 		t := time.After(1 * time.Hour)
+		// get clan information
+		rl.Wait(ctx)
+		resp, err := http.Get("https://api.wiseoldman.net/v2/groups/276")
+		if err != nil {
+			fmt.Println("failed to get clan details", err)
+		} else {
+			data, err := io.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				fmt.Println("Failed to read clan details", err)
+			} else {
+				clanInfo.Lock()
+				json.Unmarshal(data, &clanInfo.Info)
+				clanInfo.Unlock()
+			}
+		}
 		// lookup wiseoldman information per boss
 		for _, boss := range Bosses {
 			offset := 0
 			bossResults := make([]wiseOldMangained, 0)
 			// loop for the boss until the clan hasn't gained any more kills
 			for {
-				rl.Wait(context.Background())
+				rl.Wait(ctx)
 				fmt.Println("fetching: Boss: ", boss, "Offset: ", offset)
-				resp, err := http.Get(fmt.Sprintf(api, clanID, boss, offset))
+				resp, err := http.Get(fmt.Sprintf(apiBossKC, clanID, boss, offset))
 				if err != nil {
 					log.Println(err)
 					break
@@ -126,9 +226,9 @@ func wiseOldmanSync() {
 			}
 			fmt.Println("Boss: ", boss, "Total: ", total)
 			// replace the value in the mutex data
-			clanBossInfo.Lock()
-			clanBossInfo.Bosses[boss] = total
-			clanBossInfo.Unlock()
+			clanInfo.Lock()
+			clanInfo.Bosses[boss] = total
+			clanInfo.Unlock()
 		}
 		// make two tables for bosses for 7 days and 30 days
 		//

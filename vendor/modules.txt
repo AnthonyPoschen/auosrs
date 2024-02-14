@@ -2,6 +2,25 @@
 ## explicit; go 1.20
 github.com/a-h/templ
 github.com/a-h/templ/safehtml
+# github.com/mergestat/timediff v0.0.3
+## explicit; go 1.17
+github.com/mergestat/timediff
+github.com/mergestat/timediff/locale
+# golang.org/x/text v0.14.0
+## explicit; go 1.18
+golang.org/x/text/feature/plural
+golang.org/x/text/internal
+golang.org/x/text/internal/catmsg
+golang.org/x/text/internal/format
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
+golang.org/x/text/internal/number
+golang.org/x/text/internal/stringset
+golang.org/x/text/internal/tag
+golang.org/x/text/language
+golang.org/x/text/message
+golang.org/x/text/message/catalog
+golang.org/x/text/number
 # golang.org/x/time v0.5.0
 ## explicit; go 1.18
 golang.org/x/time/rate

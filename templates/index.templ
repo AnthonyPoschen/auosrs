@@ -1,8 +1,12 @@
 package templates
 
-import "github.com/anthonyposchen/auosrs.git/templates/partials"
+import (
+	"fmt"
+	"github.com/anthonyposchen/auosrs.git/templates/partials"
+	"github.com/anthonyposchen/auosrs.git/templates/route"
+)
 
-templ Index() {
+templ Index(info route.Info) {
 	<!DOCTYPE html>
 	<html lang="en">
 		@partials.Head() {
@@ -10,9 +14,9 @@ templ Index() {
 		}
 		<body class="container">
 			<header class="p-2">
-				<h1 class="text-4xl text-center text-primary">AUOSRS</h1>
+				<h1 class="text-4xl text-center text-primary">{ info.Name }</h1>
 				<p class="text-l text-center text-slate-400">
-					Australian Old School RuneScape
+					Australian Old School RuneScape Clan
 				</p>
 				<div class="flex justify-center items-center">
 					<a
@@ -34,22 +38,34 @@ templ Index() {
 						<div class="flex">
 							<div class="flex-grow">
 								<p>
-									AUOSRS is an active pve and occassional pvp community of
-									layed back people who don't take the game too seriously.
+									Welcome to the "Au Osrs" clan, where we're all about having a
+									good time while taking a lighthearted jab at the game and each
+									other. We're a group of fun-loving adventurers who enjoy banter
+									just as much as slaying dragons and completing quests. So, if
+									you're ready to dive into the world of Gielinor with a bunch
+									of sarcastic, witty, and slightly irreverent friends, join us
+									and let the good times roll!
 								</p>
 							</div>
-							<div class="flex-1 min-w-44 pl-4">
+							<div class="flex-1 min-w-44 pl-6">
 								<h3 class="text-primary text-l">Ingame Details</h3>
-								<p class="text-sm">Clan Chat: Au OSRS</p>
-								<p class="text-sm">Clan Home World: 535</p>
+								<p class="text-sm">Chat:         { info.ClanChat }</p>
+								<p class="text-sm">Home World:   { fmt.Sprint(info.Homeworld) }</p>
+								<p class="text-sm">Member Count: { fmt.Sprint(info.MemberCount) }</p>
 							</div>
 						</div>
 					</article>
 				</section>
 				<section>
-					<article>
-						<h2 class="text-xl text-primary">Clan Activity</h2>
-						<div hx-trigger="load" hx-get="/activity" hx-swap="outerHTML"></div>
+					<article class="flex">
+						<div class="flex-auto pl-4 pr-4">
+							<h2 class="text-xl text-primary">Clan Activity</h2>
+							<div hx-trigger="load" hx-get="/activity" hx-swap="outerHTML"></div>
+						</div>
+						<div class="flex-auto pl-4 pr-4">
+							<h2 class="text-xl text-primary">Clan Members</h2>
+							<div hx-trigger="load" hx-get="/members" hx-swap="outerHTML"></div>
+						</div>
 					</article>
 				</section>
 			</main>
