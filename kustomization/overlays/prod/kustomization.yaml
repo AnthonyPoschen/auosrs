@@ -1,0 +1,7 @@
+---
+resources:
+- ../../base
+images:
+- name: app
+  newName: ghcr.io/anthonyposchen/auosrs
+  newTag: ee68535

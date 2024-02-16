@@ -111,9 +111,10 @@ func MemberList(w http.ResponseWriter, r *http.Request) {
 		t, _ := time.Parse(time.RFC3339, v.CreatedAt)
 		createDiff := timediff.TimeDiff(t)
 		data = append(data, route.ClanMember{
-			PlayerID:  v.PlayerID,
-			Role:      v.Role,
-			CreatedAt: createDiff,
+			PlayerID:      v.PlayerID,
+			Role:          v.Role,
+			CreatedAt:     createDiff,
+			CreatedAtUnix: t.Unix(),
 			Player: struct {
 				Name string "json:\"displayName\""
 			}{Name: v.Player.Name},
@@ -157,7 +158,13 @@ func MemberList(w http.ResponseWriter, r *http.Request) {
 				return -1
 			}
 		}
-		return cmp.Compare(r(i), r(j))
+		// compare rank
+		c := cmp.Compare(r(i), r(j))
+		// if the rank is the same, compare the created at time
+		if c == 0 {
+			return cmp.Compare(i.CreatedAtUnix, j.CreatedAtUnix)
+		}
+		return c
 	})
 	route.MemberList(data).Render(context.Background(), w)
 }

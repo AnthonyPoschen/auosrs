@@ -13,62 +13,55 @@ templ Index(info route.Info) {
 			<title>AUOSRS</title>
 		}
 		<body class="container">
-			<header class="p-2">
-				<h1 class="text-4xl text-center text-primary">{ info.Name }</h1>
-				<p class="text-l text-center text-slate-400">
-					Australian Old School RuneScape Clan
-				</p>
-				<div class="flex justify-center items-center">
-					<a
-						href="https://discord.gg/auosrs"
-						class="w-72 btn btn-primary flex items-center justify-center
+			<article>
+				<header class="p-2">
+					<h1 class="text-4xl text-center text-primary">{ info.Name }</h1>
+					<div class="items-center flex flex-col">
+						<p class="text-l text-center text-slate-400">
+							Australian Old School RuneScape Clan
+						</p>
+						<p class="text-sm">Chat:         { info.ClanChat }</p>
+						<p class="text-sm">Home World:   { fmt.Sprint(info.Homeworld) }</p>
+					</div>
+					<div class="flex justify-center items-center">
+						<a
+							href="https://discord.gg/auosrs"
+							class="w-72 btn btn-primary flex items-center justify-center
                      rounded-lg bg-primary bg-opacity-5 hover:bg-opacity-50"
-					>
-						<img src="/ico/discord.png" alt="discord logo" width="50" height="50"/>
-						<span class="pl-3 underline text-blue-700 dark:text-blue-400">
-							Join discord for more info
-						</span>
-					</a>
-				</div>
-			</header>
-			<main class="p-4">
-				<section>
-					<article>
+						>
+							<img src="/ico/discord.png" alt="discord logo" width="50" height="50"/>
+							<span class="pl-3 underline text-blue-700 dark:text-blue-400">
+								Join discord for more info
+							</span>
+						</a>
+					</div>
+				</header>
+				<main class="p-4">
+					<section>
 						<h2 class="text-xl text-primary">Clan Information</h2>
-						<div class="flex">
-							<div class="flex-grow">
-								<p>
-									Welcome to the "Au Osrs" clan, where we're all about having a
-									good time while taking a lighthearted jab at the game and each
-									other. We're a group of fun-loving adventurers who enjoy banter
-									just as much as slaying dragons and completing quests. So, if
-									you're ready to dive into the world of Gielinor with a bunch
-									of sarcastic, witty, and slightly irreverent friends, join us
-									and let the good times roll!
-								</p>
-							</div>
-							<div class="flex-1 min-w-44 pl-6">
-								<h3 class="text-primary text-l">Ingame Details</h3>
-								<p class="text-sm">Chat:         { info.ClanChat }</p>
-								<p class="text-sm">Home World:   { fmt.Sprint(info.Homeworld) }</p>
-								<p class="text-sm">Member Count: { fmt.Sprint(info.MemberCount) }</p>
-							</div>
+						<div>
+							<p>
+								Au Osrs is all about having a good time while taking a lighthearted 
+								jab at the game and each other. we are primarily a casual clan
+								which does PvM and skilling, but we also have occasional group PvP.
+								To see our weekly clan events and event photos, check out our discord. <a href="https://discord.gg/auosrs" class="underline text-blue-700 dark:text-blue-400">https://discord.gg/auosrs</a>
+							</p>
+							<br/>
+							<p>
+								Below is a list of our current clan members and how active we have been at PvM in the last week.
+							</p>
 						</div>
-					</article>
-				</section>
-				<section>
-					<article class="flex">
-						<div class="flex-auto pl-4 pr-4">
-							<h2 class="text-xl text-primary">Clan Activity</h2>
+					</section>
+					<section class="flex flex-col sm:flex-row">
+						<div class="flex-auto md:flex-1 pl-4 pr-4">
 							<div hx-trigger="load" hx-get="/activity" hx-swap="outerHTML"></div>
 						</div>
-						<div class="flex-auto pl-4 pr-4">
-							<h2 class="text-xl text-primary">Clan Members</h2>
+						<div class="flex-auto md:flex-1 pl-4 pr-4">
 							<div hx-trigger="load" hx-get="/members" hx-swap="outerHTML"></div>
 						</div>
-					</article>
-				</section>
-			</main>
+					</section>
+				</main>
+			</article>
 		</body>
 	</html>
 }
