@@ -3,6 +3,7 @@ WORKDIR /code
 COPY . .
 RUN npm install
 RUN npx parcel build --dist-dir dist --no-content-hash
+RUN cp -R ./src/ico ./dist/ico
 
 # ----
 FROM golang:alpine as builder
