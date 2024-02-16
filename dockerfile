@@ -11,7 +11,7 @@ RUN go install github.com/a-h/templ/cmd/templ@latest
 COPY --from=frontend /code /code
 RUN templ generate
 RUN go test ./... 
-RUN GOOS=linux GOARCH=amd64 go build -o main ./main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./main.go
 
 # ----
 FROM alpine:latest as final
