@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: client-info-secret
+  namespace: app-auosrs
+spec:
+  encryptedData:
+    token: AgA2jNcZIVf9ySQVDHkfYXm4dGR/o7fQxqHkb8BQGBC2NJaHcnuteYVkb23rQbdNhe/dO1UhGTrVi2/TtIJlNvmmnTBm8qnZ90qIGF0BB+J2i7ZJKUjd5AqF1mjNmNBJMAPHFz2fXIEk5EUixj5xowOiRSjeK26+np3Cupiv8xWHHPTuJXBCeZhNyF/VspnPMbjV8JDtOgPrgJJXcQrk4lmvX8/7grRX/gLR1hn/BYo74NrS6uDStbtZPrKEipAq9zZON1GCrh4hrFvIBJXqp7r7vGxyblbqzFa5PVNG0YYtSOJrVAMKD5AfMqE7BPy3W91naHEeAisfpmbcUU2dUF8JFRTvIfKizlEfu988w70+1Aq6A2aQhUQlzAl+YsqVZaEEf3r+O6hUYIbWkjLZ4fOB/0qnu8uBd8yBLONwArr6UVMUeMb+lX3w/nuSKRiSNuNOtSkZul0mVCUsrlUyUmqNfg0IZvIiYOkYs2HYLuJsbzAtpQ/j1V+KvvsvFxpcin8Pdvsyb8pj9t9G2cwFH7/1whMv11BjUD8bhBfPV2lLlQj1a5b0Os2n7lUsgYveIJ1d8RP7jUKNbbrpCHjDSvQi8/HbeDrLUwWClnKlOwDcpp0xmA1P7IXv3iNuA31XrYL4fRmchlXlqjkGeea1ZKa66UHODaZq+pPMEbzKUuQvwAaubYxwDY/1SI43JlZXQ4g=
+  template:
+    metadata:
+      creationTimestamp: null
+      name: client-info-secret
+      namespace: app-auosrs

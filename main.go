@@ -1,3 +1,5 @@
+// TODO: cleanup api calls into a util func and handle 429s / errors with retries
+// or handle them gracefully
 package main
 
 import (
@@ -10,6 +12,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"os"
 	"slices"
 	"strings"
 	"sync"
@@ -66,7 +69,7 @@ func getFileSystem() http.FileSystem {
 }
 
 func main() {
-	go wiseOldmanSync()
+	go wiseOldmanSync(os.Getenv("TOKEN"))
 	// start hourly cron to update wiseold man information
 	http.HandleFunc("/members", MemberList)
 	http.HandleFunc("/activity", Activity)
@@ -175,7 +178,7 @@ type wiseOldMangained struct {
 	} `json:"data"`
 }
 
-func wiseOldmanSync() {
+func wiseOldmanSync(token string) {
 	rl := rate.NewLimiter(rate.Every(time.Minute/20), 1)
 	ctx := context.Background()
 	apiBossKC := "https://api.wiseoldman.net/v2/groups/%d/gained?metric=%s&period=week&limit=50&offset=%d"
@@ -183,7 +186,12 @@ func wiseOldmanSync() {
 		t := time.After(1 * time.Hour)
 		// get clan information
 		rl.Wait(ctx)
-		resp, err := http.Get("https://api.wiseoldman.net/v2/groups/276")
+		req, _ := http.NewRequest("GET", "https://api.wiseoldman.net/v2/groups/276", nil)
+		if token != "" {
+			req.Header.Add("x-api-key", token)
+		}
+		req.Header.Add("User-Agent", "discordUser/Zanven org/auosrs")
+		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
 			fmt.Println("failed to get clan details", err)
 		} else {
@@ -205,7 +213,13 @@ func wiseOldmanSync() {
 			for {
 				rl.Wait(ctx)
 				fmt.Println("fetching: Boss: ", boss, "Offset: ", offset)
-				resp, err := http.Get(fmt.Sprintf(apiBossKC, clanID, boss, offset))
+
+				req, _ := http.NewRequest("GET", fmt.Sprintf(apiBossKC, clanID, boss, offset), nil)
+				if token != "" {
+					req.Header.Add("x-api-key", token)
+				}
+				req.Header.Add("User-Agent", "discordUser/Zanven org/auosrs")
+				resp, err := http.DefaultClient.Do(req)
 				if err != nil {
 					log.Println(err)
 					break
