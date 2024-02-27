@@ -11,8 +11,8 @@ __check_defined = \
 gen_wiseoldman_secret:
 	@:$(call check_defined, TOKEN, wiseoldman token)
 	@:$(call check_defined, ENV, environment for secret)
-	kubectl create secret generic client-info-secret \
+	kubectl create secret generic wiseoldman \
 		--namespace app-auosrs \
 		--dry-run=client \
-		--from-literal=token="${token}" \
+		--from-literal=token="${TOKEN}" \
 		--output="yaml" | kubeseal -o yaml > ./${ENV}/wiseoldman.yaml

@@ -100,7 +100,7 @@ spec:
         - name: TOKEN
           valueFrom:
             secretKeyRef:
-              name: auosrs
+              name: wiseoldman
               key: token
         ports:
         - containerPort: 42069
