@@ -45,8 +45,8 @@ spec:
   replicas: 3
   strategy:
     rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+      maxSurge: 70%
+      maxUnavailable: 70%
     type: RollingUpdate
   template:
     metadata:
