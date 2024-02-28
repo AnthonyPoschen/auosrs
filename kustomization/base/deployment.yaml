@@ -8,6 +8,9 @@ spec:
   - name: ingress
     namespace: kube-system
     sectionName: https-auosrs
+  - name: ingress
+    namespace: kube-system
+    sectionName: http-auosrs
   hostnames:
   - "auosrs.com.au"
   rules:
