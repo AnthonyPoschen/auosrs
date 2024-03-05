@@ -15,25 +15,31 @@ templ Index(info route.Info) {
 		<body class="container">
 			<article>
 				<header class="p-2">
-					<h1 class="text-4xl text-center text-primary">{ info.Name }</h1>
-					<div class="items-center flex flex-col">
-						<p class="text-l text-center text-slate-400">
-							Australian Old School RuneScape Clan
-						</p>
-						<p class="text-sm">Chat:         { info.ClanChat }</p>
-						<p class="text-sm">Home World:   { fmt.Sprint(info.Homeworld) }</p>
-					</div>
-					<div class="flex justify-center items-center">
-						<a
-							href="https://discord.gg/auosrs"
-							class="w-72 btn btn-primary flex items-center justify-center
-                     rounded-lg bg-primary bg-opacity-5 hover:bg-opacity-50"
-						>
-							<img src="/ico/discord.png" alt="discord logo" width="50" height="50"/>
-							<span class="pl-3 underline text-blue-700 dark:text-blue-400">
-								Join discord for more info
-							</span>
-						</a>
+					<div style="background: url(./ico/banner.png);background-repeat: no-repeat; background-position: center;" class="object-contain bg-center">
+						<div class="flex flex-col min-h-96 justify-center items-center bg-center">
+							<div class="bg-gray-100 dark:bg-gray-900 bg-opacity-65 dark:bg-opacity-65 rounded-md justify-center items-center w-fit p-3">
+								<h1 class="text-4xl text-center text-primary">{ info.Name }</h1>
+								<div class="items-center flex flex-col">
+									<p class="text-l text-center dark:text-slate-400 text-slate-600">
+										Australian Old School RuneScape Clan
+									</p>
+									<p class="text-sm">Chat:         { info.ClanChat }</p>
+									<p class="text-sm">Home World:   { fmt.Sprint(info.Homeworld) }</p>
+								</div>
+								<div class="flex justify-center items-center">
+									<a
+										href="https://discord.gg/auosrs"
+										class="w-72 btn btn-primary flex items-center justify-center
+                     rounded-sm p-2 bg-primary bg-opacity-5 bg-opactity-40 hover:bg-opacity-80 outline"
+									>
+										<img src="/ico/discord.png" alt="discord logo" width="50" height="50"/>
+										<span class="pl-3 underline text-blue-700 dark:text-blue-400">
+											Join discord for more info
+										</span>
+									</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</header>
 				<main class="p-4">
