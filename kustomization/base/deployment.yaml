@@ -60,7 +60,7 @@ spec:
   selector:
     matchLabels:
       app: auosrs
-  replicas: 3
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 70%

@@ -179,11 +179,11 @@ type wiseOldMangained struct {
 }
 
 func wiseOldmanSync(token string) {
-	rl := rate.NewLimiter(rate.Every(time.Minute/20), 1)
+	rl := rate.NewLimiter(rate.Every(time.Minute/10), 1)
 	ctx := context.Background()
 	apiBossKC := "https://api.wiseoldman.net/v2/groups/%d/gained?metric=%s&period=week&limit=50&offset=%d"
 	for {
-		t := time.After(1 * time.Hour)
+		t := time.After(3 * time.Hour)
 		// get clan information
 		rl.Wait(ctx)
 		req, _ := http.NewRequest("GET", "https://api.wiseoldman.net/v2/groups/276", nil)
