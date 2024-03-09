@@ -17,7 +17,7 @@ templ Index(info route.Info) {
 				<header class="p-2">
 					<div style="background: url(./ico/banner.png);background-repeat: no-repeat; background-position: center;" class="object-contain bg-center">
 						<div class="flex flex-col min-h-96 justify-center items-center bg-center">
-							<div class="font-bold text-lg bg-slate-100 dark:bg-slate-900 bg-opacity-65 dark:bg-opacity-65 justify-center items-center w-fit p-3">
+							<div class="rounded-full font-bold text-lg dark:bg-[radial-gradient(ellipse_at_center,_rgba(0,0,0,0.5)_50%,transparent_70%)] bg-[radial-gradient(ellipse_at_center,_rgba(210,210,210,0.7)_50%,transparent_70%)] justify-center items-center w-fit p-14">
 								<h1 class="text-4xl text-center text-primary">{ info.Name }</h1>
 								<div class="items-center flex flex-col">
 									<p class="text-l text-center dark:text-slate-300 text-slate-700">
@@ -42,7 +42,7 @@ templ Index(info route.Info) {
 						</div>
 					</div>
 				</header>
-				<main class="p-4">
+				<main>
 					<section>
 						<h2 class="text-xl text-primary">Clan Information</h2>
 						<div>
@@ -59,11 +59,11 @@ templ Index(info route.Info) {
 							</p>
 						</div>
 					</section>
-					<section class="flex flex-col sm:flex-row">
-						<div class="flex-auto md:flex-1 pl-4 pr-4">
+					<section class="flex flex-col sm:flex-row m-0">
+						<div class="flex-auto md:flex-1 pl-4 pr-4 h-[40rem] overflow-y-auto overflow-x-hidden">
 							<div hx-trigger="load" hx-get="/activity" hx-swap="outerHTML"></div>
 						</div>
-						<div class="flex-auto md:flex-1 pl-4 pr-4">
+						<div class="flex-auto md:flex-1 pl-4 pr-4 h-[40rem] overflow-y-auto overflow-x-hidden">
 							<div hx-trigger="load" hx-get="/members" hx-swap="outerHTML"></div>
 						</div>
 					</section>

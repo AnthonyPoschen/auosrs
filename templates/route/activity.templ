@@ -12,9 +12,9 @@ type ActivityBoss struct {
 }
 
 templ ActivityBossKC(bosses []ActivityBoss,TotalKC string) {
-	<h2 class="text-xl text-primary text-center">Boss KC last 7 days: { TotalKC }</h2>
-	<table role="grid" class="table table-striped">
-		<thead>
+	<h2 class="text-xl text-primary text-center sticky top-0" style="background-color: var(--card-background-color)">Boss KC last 7 days: { TotalKC }</h2>
+	<table role="grid" class="table table-striped min-w-max">
+		<thead class="sticky top-7" style="background-color: var(--card-background-color)">
 			<tr>
 				<th>Boss</th>
 				<th>kills</th>
@@ -50,16 +50,16 @@ type ClanMember struct {
 }
 
 templ MemberList(members []ClanMember) {
-	<h2 class="text-xl text-primary text-center">Members { fmt.Sprint(len(members)) } / 500</h2>
-	<table role="grid" class="table table-striped">
-		<thead>
+	<h2 class="text-xl text-primary text-center sticky top-0" style="background-color: var(--card-background-color)">Members { fmt.Sprint(len(members)) } / 500</h2>
+	<table role="grid" class="table-auto table-striped min-w-max">
+		<thead class="sticky top-7" style="background-color: var(--card-background-color)">
 			<tr>
 				<th>Player</th>
 				<th>Role</th>
 				<th>Joined</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody class="overflow-auto overflow-y-scroll">
 			for _, v := range members {
 				<tr>
 					<td>{ v.Player.Name }</td>
@@ -70,7 +70,7 @@ templ MemberList(members []ClanMember) {
 							<img src={ fmt.Sprintf("/ico/clan_%s.webp", strings.ToLower(v.Role)) } width="20" height="20" alt={ v.Role }/>
 						}
 					</td>
-					<td>{ v.CreatedAt } </td>
+					<td class="text-nowrap">{ v.CreatedAt } </td>
 				</tr>
 			}
 		</tbody>
