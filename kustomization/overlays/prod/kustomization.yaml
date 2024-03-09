@@ -5,4 +5,4 @@ resources:
 images:
 - name: app
   newName: ghcr.io/anthonyposchen/auosrs
-  newTag: 6d6b810
+  newTag: 79fe97c
