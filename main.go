@@ -4,6 +4,7 @@ package main
 
 import (
 	"cmp"
+	"compress/gzip"
 	"context"
 	"embed"
 	"encoding/json"
@@ -25,6 +26,15 @@ import (
 	"golang.org/x/text/number"
 	"golang.org/x/time/rate"
 )
+
+type gzipResponseWriter struct {
+	io.Writer
+	http.ResponseWriter
+}
+
+func (w gzipResponseWriter) Write(b []byte) (int, error) {
+	return w.Writer.Write(b)
+}
 
 const (
 	clanID = 276
@@ -68,12 +78,26 @@ func getFileSystem() http.FileSystem {
 	return http.FS(fsys)
 }
 
+func GzipHandler(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+			fn(w, r)
+			return
+		}
+		w.Header().Set("Content-Encoding", "gzip")
+		gz := gzip.NewWriter(w)
+		defer gz.Close()
+		gzr := gzipResponseWriter{Writer: gz, ResponseWriter: w}
+		fn(gzr, r)
+	}
+}
+
 func main() {
 	go wiseOldmanSync(os.Getenv("TOKEN"))
 	// start hourly cron to update wiseold man information
-	http.HandleFunc("/members", MemberList)
-	http.HandleFunc("/activity", Activity)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/members", GzipHandler(MemberList))
+	http.HandleFunc("/activity", GzipHandler(Activity))
+	http.HandleFunc("/", GzipHandler(func(w http.ResponseWriter, r *http.Request) {
 		// for specifically the root / index
 		// we want to replace the default with our own
 		if r.URL.Path == "/" || r.URL.Path == "/index.html" {
@@ -84,7 +108,7 @@ func main() {
 			// do a templ include!!
 		}
 		http.FileServer(getFileSystem()).ServeHTTP(w, r)
-	})
+	}))
 	fmt.Println("Server is running on port 42069")
 	fmt.Println(http.ListenAndServe(":42069", nil))
 }
