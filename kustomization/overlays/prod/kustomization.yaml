@@ -1,8 +1,8 @@
 ---
 resources:
-- ../../base
-- ./wiseoldman.yaml
+  - ../../base
+  - ./wiseoldman.yaml
 images:
-- name: app
-  newName: ghcr.io/anthonyposchen/auosrs
-  newTag: f85a6ed
+  - name: app
+    newName: ghcr.io/anthonyposchen/auosrs
+    newTag: 68a319e
